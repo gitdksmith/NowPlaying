@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Meow Playing</string>
+    <string name="table_name">songs</string>
+    <string name="sun_radio_button">100.1 \n Sun Radio</string>
+    <string name="kutx_button">98.9 \n KUTX</string>
+    <string name="save_button">Save</string>
+    <string name="edit_button">Edit</string>
+    <string name="delete_button">Delete</string>
+    <string name="update_button">Update</string>
+    <string name="youtube_button">Youtube</string>
+    <string name="edit_song_hint">song name goes here</string>
+    <string name="edit_artist_hint">artist name goes here</string>
+    <string name="view_library">View Library</string>
+    <string name="id_title">ID</string>
+    <string name="song_title">Song</string>
+    <string name="artist_title">Artist</string>
+</resources>
