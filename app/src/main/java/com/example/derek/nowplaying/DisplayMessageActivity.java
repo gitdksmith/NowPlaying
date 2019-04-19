@@ -2,29 +2,41 @@ package com.example.derek.nowplaying;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.List;
+
+/**
+ * Class to display retrieved song information in editable fields with option to save
+ * song info to library.
+ */
 
 public class DisplayMessageActivity extends AppCompatActivity {
 
+    /**
+     * Display song and artist names passed by intent extra
+     * set in MainActivity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_message);
 
+        //Determine if sun or kutx button was pressed
         String key = MainActivity.SUN_NOW_PLAYING;
         if (MainActivity.kutx_pressed) key = MainActivity.KUTX_NOW_PLAYING;
         MainActivity.sun_radio_pressed = false;
         MainActivity.kutx_pressed = false;
 
+        //get the extra info containing song and artist data
         Intent intent = getIntent();
         String[] messages = intent.getStringArrayExtra(key);
         if (messages != null) {
@@ -53,36 +65,32 @@ public class DisplayMessageActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creates Song object to save to songDB database
+     * @param view
+     */
     public void save(View view){
-        SQLiteDatabase db = openOrCreateDatabase("MeowPlaying.db", MODE_PRIVATE, null);
-        try {
-//            db.execSQL("drop table if exists songs");
-            db.execSQL("CREATE TABLE IF NOT exists songs(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                    " song VARCHAR, artist VARCHAR, CONSTRAINT song_artist_unique_constraint UNIQUE (song, artist));");
-        } catch (Exception e) {
-            Log.e("sql error", e.toString());
-        }
+        AppDatabase db = Room
+                .databaseBuilder(getApplicationContext(), AppDatabase.class, "songDB")
+                .allowMainThreadQueries().build();
+        SongDao dao = db.getSongDao();
 
         String[] names = new String[] {((EditText)findViewById(R.id.edit_song)).getText().toString(),
                 ((EditText)findViewById(R.id.edit_artist)).getText().toString()};
         String message = null;
 
-        Cursor resultSet = db.rawQuery("select * from songs where song=? and artist=?", names);
-        if(resultSet.getCount() < 1) {
+        List<Song> songList = dao.loadAll();
 
-            db.execSQL("INSERT INTO songs VALUES (null, \"" + names[0] + "\",\"" + names[1] + "\")");
-            Cursor verifySet = db.rawQuery("select * from songs where song=? and artist=?", names);
-            if (verifySet.getCount() > 0) {
-                message = "saved to library";
-            } else {
-                message = "unable to save to library";
-            }
-        }else {
+        Song nowPlaying = new Song();
+        nowPlaying.setSongName(names[0]);
+        nowPlaying.setArtistName(names[1]);
+        if(songList.contains(nowPlaying))
             message = "already exists in library";
+        else{
+            dao.insert(nowPlaying);
+            message = "saved to library";
         }
-        Toast.makeText(this,message, Toast.LENGTH_LONG).show();
 
-        db.close();
-        resultSet.close();
+        Toast.makeText(this,message, Toast.LENGTH_LONG).show();
     }
 }

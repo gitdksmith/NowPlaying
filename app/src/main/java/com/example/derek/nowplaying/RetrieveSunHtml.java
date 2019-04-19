@@ -1,6 +1,7 @@
 package com.example.derek.nowplaying;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +11,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by Derek on 10/7/2016.
+ * Retrieve song information from Sun Radio.
+ * Main activity passes in URL. HTML is parsed to find "Now playing" and retrieve song data.
  */
 
 class RetrieveSunHtml extends AsyncTask<String, Void, String[]> {
@@ -23,6 +25,8 @@ class RetrieveSunHtml extends AsyncTask<String, Void, String[]> {
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line = "trash";
             String[] message = new String[2];
+
+            //Go line by line until song info is found.
             try {
                 while ((line = br.readLine()) != null){
                     if(line.contains("Now playing:")){

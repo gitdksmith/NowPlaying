@@ -1,19 +1,21 @@
 package com.example.derek.nowplaying;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+
 import android.view.View;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.util.Iterator;
+import java.util.List;
+
 /**
- * Created by Derek on 10/15/2016.
+ * Display library alternating table color rows.
  */
 
 public class DisplayLibraryActivity extends AppCompatActivity {
@@ -25,18 +27,23 @@ public class DisplayLibraryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_library);
 
-        SQLiteDatabase db = openOrCreateDatabase("MeowPlaying.db", MODE_PRIVATE, null);
-        Cursor resultSet = db.rawQuery("select * from songs", null);
+        AppDatabase db = Room
+                .databaseBuilder(getApplicationContext(), AppDatabase.class, "songDB")
+                .allowMainThreadQueries().build();
+        SongDao dao = db.getSongDao();
 
         boolean colorTracker = false;
         String green = "#A3FCCE";
         String blue = "#A3DDFC";
 
         try {
-            while (resultSet.moveToNext()) {
-                final String id = resultSet.getString(0);
-                final String song = resultSet.getString(1);
-                final String artist = resultSet.getString(2);
+            List<Song> songList = dao.loadAll();
+            Iterator<Song> songListIterator =((List) dao.loadAll()).iterator();
+            while (songListIterator.hasNext()) {
+                Song currentSong = songListIterator.next();
+                final String id = Integer.toString(currentSong.getId());
+                final String song = currentSong.getSongName();
+                final String artist = currentSong.getArtistName();
 
                 TextView tv = (TextView) findViewById(R.id.table_song);
 
@@ -44,11 +51,6 @@ public class DisplayLibraryActivity extends AppCompatActivity {
                 int padding = (int)getResources().getDimension(R.dimen.table_id_padding);
                 tid.setPadding(0,0,padding,0);
                 tid.setText(id);
-
-//                Button bsong = new Button(this);
-//                bsong.setLayoutParams(tv.getLayoutParams());
-//                bsong.setText(song);
-//                bsong.onclick
 
                 TextView tsong = new TextView(this);
                 tsong.setLayoutParams(tv.getLayoutParams());
@@ -60,17 +62,6 @@ public class DisplayLibraryActivity extends AppCompatActivity {
 
                 String color = colorTracker == true ? green : blue;
                 colorTracker = !colorTracker;
-
-//                <Button
-//                android:layout_width="wrap_content"
-//                android:layout_height="wrap_content"
-//                android:layout_weight="1"
-//                android:text="@string/save_button"
-//                android:id="@+id/button"
-//                android:layout_alignParentBottom="true"
-//                android:layout_centerHorizontal="true"
-//                android:layout_marginBottom="102dp"
-//                android:onClick="save"/>
 
                 TableRow row = new TableRow(this);
                 row.addView(tid);
@@ -92,8 +83,8 @@ public class DisplayLibraryActivity extends AppCompatActivity {
                 table.addView(row);
             }
 
-        } finally {
-            resultSet.close();
+        }
+        finally {
         }
     }
 }

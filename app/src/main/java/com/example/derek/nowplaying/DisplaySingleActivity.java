@@ -2,16 +2,15 @@ package com.example.derek.nowplaying;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
 /**
- * Created by Derek on 12/2/2016.
+ * Class to view song info from library. Can update or search song data on YouTube.
  */
 
 public class DisplaySingleActivity extends AppCompatActivity {

@@ -2,10 +2,18 @@ package com.example.derek.nowplaying;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+// TODO: App crashes if view empty library on fresh install
+// TODO: Can save empty fields to library
+// TODO: non centered fields in DisplaySingleActivity view
+// TODO: If "now playing" is not available, try for "last" or "current program".
+// TODO: Backup library online
 
 public class MainActivity extends AppCompatActivity {
     public static final String KUTX_NOW_PLAYING="com.example.derek.myapplication.KUTX_NOW_PLAYING";
@@ -17,8 +25,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // initialize database using Room
+        AppDatabase db = Room
+                .databaseBuilder(getApplicationContext(), AppDatabase.class, "songDB")
+                .build();
     }
 
+    /**
+     * Activity_main.xml creates buttons that when clicked call this method. Depending on the button
+     * we either retrieve sun radio or kutx information.
+     */
     public void getNowPlaying(View view){
         Intent intent = new Intent(this, DisplayMessageActivity.class);
         String[] message = null;
@@ -35,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.sun_radio_button :
                 key = SUN_NOW_PLAYING;
-                url = "http://radio.securenetsystems.net/songdata/v5/index.cfm?stationCallSign=SUNRADIO&amp";
+                url = "https://radio.securenetsystems.net/songdata/v5/index.cfm?stationCallSign=SUNRADIO&amp";
                 task = new RetrieveSunHtml().execute(url);
                 sun_radio_pressed = true;
                 break;
@@ -47,10 +64,14 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // pass song data to DisplayMessageActivity via extra and run it
         intent.putExtra(key, message);
         startActivity(intent);
     }
 
+    /**
+     * Button action for viewing library from main screen
+     */
     public void viewLibrary(View view){
         Intent intent = new Intent(this, DisplayLibraryActivity.class);
         startActivity(intent);

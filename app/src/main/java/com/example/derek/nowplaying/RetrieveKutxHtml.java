@@ -1,6 +1,7 @@
 package com.example.derek.nowplaying;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -12,11 +13,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by Derek on 10/8/2016.
+ * Retrieve song information from Kutx website.
+ * Main Activity passes in url. As of 04/2019 the url returns json with song data.
  */
 
 public class RetrieveKutxHtml extends AsyncTask<String, Void, String[]> {
-
 
     @Override
     protected String[] doInBackground(String[] input){
@@ -27,6 +28,7 @@ public class RetrieveKutxHtml extends AsyncTask<String, Void, String[]> {
             String line = "trash";
             String[] message = new String[2];
 
+            // parse out song and artist from returned json.
             try {
                 if((line = br.readLine()) != null){
                     JSONObject obj = new JSONObject(line);

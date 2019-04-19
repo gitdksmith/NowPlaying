@@ -14,4 +14,7 @@
     <string name="id_title">ID</string>
     <string name="song_title">Song</string>
     <string name="artist_title">Artist</string>
+
+    <!-- databases -->
+    <string name="song_db">song_db</string>
 </resources>
