@@ -8,7 +8,52 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.derek.nowplaying.DisplayMessageActivity">
+    tools:context="com.example.derek.nowplaying.EditSingleActivity">
+
+    <EditText android:id="@+id/edit_song"
+        android:text="@string/edit_song_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView android:id="@+id/edit_by"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="by"
+        android:layout_margin="80dp"
+        android:layout_below="@+id/text_song_display_single"
+        android:layout_centerHorizontal="true" />
+
+    <EditText android:id="@+id/edit_artist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_artist_hint"
+        android:layout_below="@+id/edit_by"
+        android:gravity="center"
+        android:layout_centerHorizontal="true" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_above="@+id/button_youtube_display_single"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/button_update"
+        android:text="@string/update_button"
+        android:onClick="update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:layout_above="@+id/button_delete"
+        android:layout_alignLeft="@+id/button_delete"
+        android:layout_alignStart="@+id/button_delete" />
 
     <Button
         android:id="@+id/button_delete"
@@ -25,51 +70,5 @@
         android:elevation="24dp"
         android:textStyle="normal|bold"
         android:textColor="#FF0000"/>
-
-    <EditText android:id="@+id/edit_artist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_artist_hint"
-        android:layout_marginTop="82dp"
-        android:layout_below="@+id/edit_by"
-        android:layout_centerHorizontal="true" />
-
-    <TextView android:id="@+id/edit_by"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="by"
-        android:layout_marginTop="80dp"
-        android:layout_below="@+id/text_song_display_single"
-        android:layout_centerHorizontal="true" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:visibility="gone"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:progressDrawable="@drawable/circular_progress_bar"
-        android:layout_above="@+id/button_youtube_display_single"
-        android:layout_centerHorizontal="true" />
-
-    <EditText android:id="@+id/edit_song"
-        android:text="@string/edit_song_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/edit_artist"
-        android:layout_alignStart="@+id/edit_artist" />
-
-    <Button
-        android:id="@+id/button_update"
-        android:text="@string/update_button"
-        android:onClick="update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
-        android:layout_above="@+id/button_delete"
-        android:layout_alignLeft="@+id/button_delete"
-        android:layout_alignStart="@+id/button_delete" />
-
 
 </RelativeLayout>
