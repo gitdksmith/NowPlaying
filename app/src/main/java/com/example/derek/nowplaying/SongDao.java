@@ -6,6 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 /**
  * Data Access Object containing methods for accessing database.
@@ -15,12 +16,15 @@ import androidx.room.Query;
 public interface SongDao {
 
     @Query("SELECT * FROM Song")
-    List<Song> loadAll();
+    public List<Song> loadAll();
 
     @Insert
-    void insert(Song... songs);
+    public void insert(Song... songs);
 
     @Delete
-    void delete(Song song);
+    public int delete(Song song);
+
+    @Update
+    public int update(Song song);
 }
 

@@ -15,6 +15,14 @@ public class Song {
     private String songName;
     private String artistName;
 
+    public Song(){};
+
+    public Song(int id, String songName, String artistName){
+        this.id = id;
+        this.songName = songName;
+        this.artistName = artistName;
+    }
+
     public int getId(){
         return id;
     }
