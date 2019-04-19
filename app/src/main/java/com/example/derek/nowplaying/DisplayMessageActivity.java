@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -44,24 +45,8 @@ public class DisplayMessageActivity extends AppCompatActivity {
             EditText editSong = (EditText) findViewById(R.id.edit_song);
             EditText editArtist = (EditText) findViewById(R.id.edit_artist);
 
-            String songMessage = null;
-            String artistMessage = null;
-            if(messages[0] == null && messages[1] == null){
-                songMessage = artistMessage = null;
-            }
-            else if (messages[0] == null){
-                artistMessage = messages[1];
-            }
-            else if(messages[1] == null){
-                songMessage = messages[0];
-            }
-            else {
-                songMessage = messages[0];
-                artistMessage = messages[1];
-            }
-
-            editSong.setText(songMessage);
-            editArtist.setText(artistMessage);
+            editSong.setText(messages[0]);
+            editArtist.setText(messages[1]);
         }
     }
 
@@ -77,20 +62,29 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
         String[] names = new String[] {((EditText)findViewById(R.id.edit_song)).getText().toString(),
                 ((EditText)findViewById(R.id.edit_artist)).getText().toString()};
-        String message = null;
+        String message = "no data to save";
 
         List<Song> songList = dao.loadAll();
 
         Song nowPlaying = new Song();
         nowPlaying.setSongName(names[0]);
         nowPlaying.setArtistName(names[1]);
-        if(songList.contains(nowPlaying))
-            message = "already exists in library";
-        else{
-            dao.insert(nowPlaying);
-            message = "saved to library";
-        }
 
+        if (!(nowPlaying.getArtistName().isEmpty() && nowPlaying.getSongName().isEmpty())) {
+            boolean save = true;
+            for (Song s : songList) {
+                if (s.getSongName().equals(nowPlaying.getSongName()) &&
+                        s.getArtistName().equals(nowPlaying.getArtistName())) {
+                    message = "already exists in library";
+                    save = false;
+                    break;
+                }
+            }
+            if (save) {
+                dao.insert(nowPlaying);
+                message = "saved to library";
+            }
+        }
         Toast.makeText(this,message, Toast.LENGTH_LONG).show();
     }
 }

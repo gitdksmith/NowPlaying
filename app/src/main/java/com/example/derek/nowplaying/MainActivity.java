@@ -9,11 +9,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-// TODO: App crashes if view empty library on fresh install
 // TODO: Can save empty fields to library
 // TODO: non centered fields in DisplaySingleActivity view
 // TODO: If "now playing" is not available, try for "last" or "current program".
 // TODO: Backup library online
+// TODO: What if we made the song id a hash of song and artist names? Would we update the hash each
+//       time we update part of the data? Is it ok to update a primary key?
 
 public class MainActivity extends AppCompatActivity {
     public static final String KUTX_NOW_PLAYING="com.example.derek.myapplication.KUTX_NOW_PLAYING";
